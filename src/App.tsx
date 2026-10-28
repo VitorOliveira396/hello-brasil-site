@@ -456,18 +456,13 @@ return <div className="app">
         <h1>Reviva esse momento.</h1>
 
         <div className="recap-video-frame">
-          <video
-            controls
-            playsInline
-            preload="metadata"
-            poster="/hello-brasil-site/images/Pretoedourado.jpeg"
-          >
-            <source
-              src="https://youtu.be/4Ptu4dTDziE?si=Ia-hQlfTrU-kQLVi"
-              type="video/mp4"
-            />
-            Seu navegador não suporta a reprodução deste vídeo.
-          </video>
+          <iframe
+            src="https://www.youtube.com/embed/4Ptu4dTDziE"
+            title="Hello Brasil - Vídeo de retrospectiva"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
         </div>
       </section>
 
