@@ -82,14 +82,14 @@ return <div className="app">
 
 <header className="header">
     <button className="brand" onClick={()=>go('home')}>
-        <a href="/" className="brand">
-            <img
-                src="/images/Pretoedourados.png"
-                alt="Hello Brasil"
-                className="brand-logo"
-            />
-            <span className='wordmark'>Hello Brasil</span>
-        </a>
+        <a href="/hello-brasil-site/" className="brand">
+        <img
+            src="/hello-brasil-site/images/Pretoedourados.png"
+            alt="Hello Brasil"
+            className="brand-logo"
+        />
+        <span className="wordmark">Hello Brasil</span>
+      </a>
     </button>
     <button className="menu-toggle" onClick={()=>setMenu(!menu)} aria-label="Abrir menu">{menu?<X/>:<Menu/>}</button>
     <nav className={menu?'nav nav-open':'nav'}>{nav.map(([id,label])=>
