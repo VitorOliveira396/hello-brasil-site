@@ -3,7 +3,7 @@ import {ArrowRight,ArrowUpRight,CalendarDays,Clock3,MapPin,Menu,X,Music2,Theater
 type Page='home'|'events'|'about'|'contact'|'detail'|'recap';
 type EventItem={id:string,title:string,category:string,date:string,month:string,year:string,time:string,location:string,city:string,price:string,image:string,description:string};
 const events:EventItem[]=[
-{id:'gustavo',title:'Chopp Samba - Flash Back',category:'Shows e Festivais',date:'22',month:'NOV',year:'2026',time:'Abertura dos portões às 17h',location:'Sedinha Quintal do Samba',city:'Santos / SP',price:'Ingressos em breve',image:'/images/Hello_Brasil.jpg',description:'Prepare-se para uma noite inesquecível com música ao vivo, energia contagiante e uma produção pensada para transformar cada instante em memória.'},
+{id:'gustavo',title:'Chopp Samba - Flash Back',category:'Shows e Festivais',date:'22',month:'NOV',year:'2026',time:'Abertura dos portões às 17h',location:'Sedinha Quintal do Samba',city:'Santos / SP',price:'Ingressos em breve',image:'/hello-brasil-site/images/Hello_Brasil.jpg',description:'Prepare-se para uma noite inesquecível com música ao vivo, energia contagiante e uma produção pensada para transformar cada instante em memória.'},
 {id:'verao',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',image:'',description:''},
 {id:'henrique',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',image:'',description:''},
 {id:'tomorrowland',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',image:'',description:''},
@@ -460,7 +460,7 @@ return <div className="app">
             controls
             playsInline
             preload="metadata"
-            poster="/images/Pretoedourado.jpeg"
+            poster="/hello-brasil-site/images/Pretoedourado.jpeg"
           >
             <source
               src="/videos/flashback_dj_helinho.mp4"
@@ -516,7 +516,7 @@ return <div className="app">
         <p>Conectamos pessoas, marcas e ideias por meio de experiências bem pensadas e eventos que deixam lembranças.</p>
     </div>
     <div className="about-photo">
-        <img src="/images/Banne3.png" alt="Espaço preparado para evento"/>
+        <img src="/hello-brasil-site/images/Banne3.png" alt="Espaço preparado para evento"/>
     </div>
     <div className="about-copy">
         <div>
@@ -601,7 +601,7 @@ return <div className="app">
         <button className="brand" onClick={()=>go('home')}>
             <a href="/" className="brand">
             <img
-                src="/images/Pretoedourados.png"
+                src="/hello-brasil-site/images/Pretoedourados.png"
                 alt="Hello Brasil"
                 className="brand-logo"
             />
