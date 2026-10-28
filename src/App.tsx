@@ -463,7 +463,7 @@ return <div className="app">
             poster="/hello-brasil-site/images/Pretoedourado.jpeg"
           >
             <source
-              src="/videos/flashback_dj_helinho.mp4"
+              src="https://youtu.be/4Ptu4dTDziE?si=Ia-hQlfTrU-kQLVi"
               type="video/mp4"
             />
             Seu navegador não suporta a reprodução deste vídeo.
