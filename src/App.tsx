@@ -1,6 +1,6 @@
 import {useMemo,useState, useEffect} from 'react';
 import {ArrowRight,ArrowUpRight,CalendarDays,Clock3,MapPin,Menu,X,Music2,Theater,Utensils,BriefcaseBusiness,Star,Search,Instagram,Facebook,Mail,Phone,ArrowLeft,CheckCircle2} from 'lucide-react';
-type Page='home'|'events'|'about'|'contact'|'detail'|'recap';
+type Page='home'|'events'|'artists'|'artistDetail'|'about'|'contact'|'detail'|'recap';
 type EventItem={id:string,title:string,category:string,date:string,month:string,year:string,time:string,location:string,city:string,price:string,image:string,description:string};
 const events:EventItem[]=[
 {id:'gustavo',title:'Chopp Samba - Flash Back',category:'Shows e Festivais',date:'22',month:'NOV',year:'2026',time:'Abertura dos portões às 17h',location:'Sedinha Quintal do Samba',city:'Santos / SP',price:'Ingressos em breve',image:'/hello-brasil-site/images/Hello_Brasil.jpg',description:'Prepare-se para uma noite inesquecível com música ao vivo, energia contagiante e uma produção pensada para transformar cada instante em memória.'},
@@ -9,7 +9,11 @@ const events:EventItem[]=[
 {id:'tomorrowland',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',image:'',description:''},
 {id:'gastronomia',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',image:'',description:''}];
 const cats=[{name:'Shows e Festivais',Icon:Music2},{name:'Cultura e Arte',Icon:Theater},{name:'Gastronomia',Icon:Utensils},{name:'Corporativo',Icon:BriefcaseBusiness},{name:'Experiências Exclusivas',Icon:Star}];
-const nav:[Page,string][]=[['home','Página Principal'],['events','Eventos'],['about','Sobre Nós'],['contact','Fale Conosco']];
+const nav:[Page,string][]=[['home','Página Principal'],['events','Eventos'],['artists','Artistas'],['about','Sobre Nós'],['contact','Fale Conosco']];
+const artists = [
+  { id: 'dj-helinho', name: 'DJ Helinho', role: 'DJ • Música e entretenimento', image: '/hello-brasil-site/images/dj-helinho.jpeg', video: '4Ptu4dTDziE', description: 'Conheça o trabalho do DJ Helinho e reviva a energia da música.' },
+  { id: 'kaka', name: 'Kaká', role: 'Artista • Música e cultura', image: '/hello-brasil-site/images/kaka.jpeg', video: 'eB7TjC-Aayw', description: 'Conheça mais sobre Kaká e acompanhe seu vídeo em destaque.' },
+];
 const musicSymbols = [
   { symbol: "𝄞", className: "clef clef-treble left-top" },
   { symbol: "𝄢", className: "clef clef-bass right-top" },
@@ -53,9 +57,10 @@ function MusicBackground() {
   );
 }
 export default function App(){
-const [page,setPage]=useState<Page>('home'),[chosen,setChosen]=useState(events[0]),[filter,setFilter]=useState('Todos'),[search,setSearch]=useState(''),[menu,setMenu]=useState(false),[form,setForm]=useState({name:'',email:'',subject:'Produção de evento',message:''}),[status,setStatus]=useState('');
+const [page,setPage]=useState<Page>('home'),[chosen,setChosen]=useState(events[0]),[chosenArtist,setChosenArtist]=useState(artists[0]),[filter,setFilter]=useState('Todos'),[search,setSearch]=useState(''),[menu,setMenu]=useState(false),[form,setForm]=useState({name:'',email:'',subject:'Produção de evento',message:''}),[status,setStatus]=useState('');
 function go(p:Page){setPage(p);setMenu(false);setStatus('');window.scrollTo({top:0,behavior:'smooth'})}
 function openEvent(e:EventItem){setChosen(e);go('detail')}
+function openArtist(artist:typeof artists[number]){setChosenArtist(artist);go('artistDetail')}
 const shown=useMemo(()=>events.filter(e=>(filter==='Todos'||e.category===filter)&&`${e.title} ${e.category} ${e.city} ${e.location}`.toLowerCase().includes(search.toLowerCase())),[filter,search]);
 function send(e:React.FormEvent){e.preventDefault();if(!form.name.trim()||!form.email.includes('@')||!form.message.trim()){setStatus('Preencha nome, e-mail válido e mensagem.');return}const subject=encodeURIComponent('Hello Brasil — '+form.subject),body=encodeURIComponent(`Nome: ${form.name}\nE-mail: ${form.email}\nAssunto: ${form.subject}\n\n${form.message}`);setStatus('Seu aplicativo de e-mail será aberto com a mensagem preparada.');window.location.href=`mailto:contato@hellobrasil.com.br?subject=${subject}&body=${body}`}
 function Card({event}:{event:EventItem}){return <article className="event-card"><button className="event-image" onClick={()=>openEvent(event)} aria-label={'Detalhes de '+event.title}><img src={event.image} alt="" loading="lazy"/><span className="image-label">{event.category}</span><span className="image-arrow"><ArrowUpRight/></span></button><div className="card-body"><div className="date"><b>{event.date}</b><span>{event.month}</span></div><div><button className="event-title" onClick={()=>openEvent(event)}>{event.title}</button><p><CalendarDays/>{event.date} de {event.month.toLowerCase()} de {event.year}</p><p><MapPin/>{event.city}</p><button className="details-link" onClick={()=>openEvent(event)}>Detalhes do evento <ArrowRight/></button></div></div></article>}
@@ -503,6 +508,53 @@ return <div className="app">
     </div>
   </main>
 )}
+
+{page === 'artists' && <main className="inner wrap artists-page">
+  <div className="page-heading">
+    <p className="eyebrow">TALENTOS • HELLO BRASIL</p>
+    <h1>Conheça nossos <span>artistas.</span></h1>
+    <p>Personalidades, música e histórias que fazem cada encontro ser especial.</p>
+  </div>
+  <div className="artist-banknote-grid">
+    {artists.map((artist, index) => <button type="button" className="artist-banknote" key={artist.id} onClick={() => openArtist(artist)}>
+      <span className="banknote-top"><span>HELLO BRASIL</span><span>№ 00{index + 1}</span></span>
+      <span className="banknote-frame">
+        <img src={artist.image} alt={artist.name} loading="lazy" />
+        <span className="banknote-seal">HB</span>
+      </span>
+      <span className="banknote-name">{artist.name}</span>
+      <span className="banknote-role">{artist.role}</span>
+      <span className="banknote-bottom"><span>GRANDES MOMENTOS</span><span>BRASIL • BR</span></span>
+    </button>)}
+  </div>
+</main>}
+
+{page === 'artistDetail' && <main className="inner wrap artist-detail-page">
+  <button className="back" onClick={() => go('artists')}><ArrowLeft /> VOLTAR AOS ARTISTAS</button>
+  <div className="artist-profile-head">
+    <img src={chosenArtist.image} alt={chosenArtist.name} />
+    <div>
+      <p className="eyebrow">ARTISTA HELLO BRASIL</p>
+      <h1>{chosenArtist.name}</h1>
+      <p className="artist-profile-role">{chosenArtist.role}</p>
+      <p>{chosenArtist.description}</p>
+    </div>
+  </div>
+  <section className="artist-video-section">
+    <p className="eyebrow">VÍDEO EM DESTAQUE</p>
+    <h2>Assista a {chosenArtist.name}</h2>
+    <div className="artist-video-frame">
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${chosenArtist.video}`}
+        title={`Vídeo de ${chosenArtist.name}`}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+      />
+    </div>
+    <a className="details-link artist-youtube-link" href={`https://youtu.be/${chosenArtist.video}`} target="_blank" rel="noopener noreferrer">Abrir vídeo no YouTube <ArrowUpRight /></a>
+  </section>
+</main>}
 
 {page==='about'&&<main className="inner wrap about"> 
     <div className="page-heading">

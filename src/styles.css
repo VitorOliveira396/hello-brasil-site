@@ -1351,3 +1351,93 @@ body, .app {
   height: 100%;
   border: 0;
 }
+
+/* ABA ARTISTAS — cédulas de artistas em preto e dourado */
+.artists-page { min-height: 60vh; }
+.artist-banknote-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 3vw, 34px);
+  max-width: 980px;
+  margin: 46px auto 20px;
+}
+.artist-banknote {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  padding: 17px;
+  overflow: hidden;
+  text-align: left;
+  color: var(--text);
+  background: radial-gradient(ellipse at 50% 40%, var(--surface-raised, #191610), var(--surface, #12110e) 72%);
+  border: 1px solid var(--gold);
+  outline: 1px solid color-mix(in srgb, var(--gold) 32%, transparent);
+  outline-offset: -7px;
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.artist-banknote::before, .artist-banknote::after {
+  content: "❧";
+  position: absolute;
+  z-index: 1;
+  color: var(--gold);
+  opacity: .7;
+  font-family: Georgia, serif;
+  font-size: 48px;
+  pointer-events: none;
+}
+.artist-banknote::before { top: 42px; left: 19px; transform: rotate(-25deg); }
+.artist-banknote::after { right: 19px; bottom: 42px; transform: rotate(155deg); }
+.artist-banknote:hover, .artist-banknote:focus-visible {
+  transform: translateY(-5px);
+  border-color: var(--goldlight, #f0d18c);
+  box-shadow: 0 16px 38px rgba(0,0,0,.24), 0 0 0 1px var(--gold);
+}
+.banknote-top, .banknote-bottom {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  color: var(--gold); font-family: Georgia, serif; font-size: 10px; font-weight: 700;
+  letter-spacing: .15em;
+}
+.banknote-top { padding: 5px 4px 13px; }
+.banknote-bottom { padding: 13px 4px 5px; font-size: 8px; letter-spacing: .12em; }
+.banknote-frame {
+  position: relative; display: block; width: 100%; height: clamp(220px, 31vw, 360px);
+  overflow: hidden; border: 1px solid color-mix(in srgb, var(--gold) 72%, transparent);
+  background: #090908;
+}
+.banknote-frame::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.04), transparent 55%, rgba(0,0,0,.36));
+  pointer-events: none;
+}
+.banknote-frame img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center 35%; transition: transform .45s ease; }
+.artist-banknote:hover .banknote-frame img { transform: scale(1.035); }
+.banknote-seal {
+  position: absolute; z-index: 2; right: 12px; bottom: 12px; display: grid; place-items: center;
+  width: 48px; height: 48px; border: 1px solid var(--gold); border-radius: 50%;
+  color: var(--gold); background: rgba(10,9,7,.82); font-family: Georgia, serif; font-size: 16px; font-weight: 700;
+}
+.banknote-name { display: block; padding: 17px 8px 5px; text-align: center; color: var(--gold); font-family: "Cinzel", Georgia, serif; font-size: clamp(20px, 2.4vw, 30px); font-weight: 700; letter-spacing: .05em; }
+.banknote-role { display: block; padding: 0 8px 12px; text-align: center; color: var(--muted); font-size: 12px; }
+.artist-detail-page { min-height: 60vh; }
+.artist-profile-head { display: grid; grid-template-columns: minmax(220px, 330px) 1fr; align-items: center; gap: clamp(24px, 5vw, 58px); margin: 28px 0 54px; }
+.artist-profile-head > img { display: block; width: 100%; max-height: 410px; aspect-ratio: 4/5; object-fit: cover; object-position: center 30%; border: 1px solid var(--gold); padding: 6px; background: var(--surface); }
+.artist-profile-head h1 { margin: 10px 0; color: var(--text); font-family: "Cinzel", Georgia, serif; font-size: clamp(36px, 5vw, 58px); }
+.artist-profile-head p:not(.eyebrow) { color: var(--muted); line-height: 1.8; }
+.artist-profile-role { color: var(--gold) !important; }
+.artist-video-section { max-width: 900px; margin: 0 auto; padding: clamp(22px, 4vw, 42px); border: 1px solid var(--border); background: var(--surface); }
+.artist-video-section h2 { margin: 8px 0 22px; color: var(--text); font-family: "Cinzel", Georgia, serif; font-size: clamp(24px, 3vw, 34px); }
+.artist-video-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #000; border: 1px solid var(--gold); }
+.artist-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.artist-youtube-link { display: inline-flex; margin-top: 18px; text-decoration: none; }
+@media (max-width: 650px) {
+  .artist-banknote-grid { grid-template-columns: 1fr; max-width: 420px; margin-top: 30px; }
+  .artist-banknote { padding: 13px; }
+  .banknote-frame { height: 310px; }
+  .artist-profile-head { grid-template-columns: 1fr; gap: 22px; margin: 25px 0 36px; }
+  .artist-profile-head > img { max-width: 330px; max-height: 390px; margin: 0 auto; }
+  .artist-video-section { padding: 18px 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .artist-banknote, .banknote-frame img { transition: none; } }
