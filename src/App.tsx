@@ -11,8 +11,8 @@ const events:EventItem[]=[
 const cats=[{name:'Shows e Festivais',Icon:Music2},{name:'Cultura e Arte',Icon:Theater},{name:'Gastronomia',Icon:Utensils},{name:'Corporativo',Icon:BriefcaseBusiness},{name:'Experiências Exclusivas',Icon:Star}];
 const nav:[Page,string][]=[['home','Página Principal'],['events','Eventos'],['artists','Artistas'],['about','Sobre Nós'],['contact','Fale Conosco']];
 const artists = [
-  { id: 'dj-helinho', name: 'DJ Helinho', role: 'DJ • Música e entretenimento', image: '/hello-brasil-site/images/dj-helinho.jpeg', video: '4Ptu4dTDziE', description: 'Conheça o trabalho do DJ Helinho e reviva a energia da música.' },
-  { id: 'kaka', name: 'Kaká', role: 'Artista • Música e cultura', image: '/hello-brasil-site/images/kaka.jpeg', video: 'eB7TjC-Aayw', description: 'Conheça mais sobre Kaká e acompanhe seu vídeo em destaque.' },
+  { id: 'dj-helinho', name: 'DJ Helinho', role: 'DJ • Música e entretenimento', image: '/hello-brasil-site/images/dj-helinho.jpeg', video: '_YzGDJDs_-A', description: 'Conheça o trabalho do DJ Helinho e reviva a energia da música.' },
+  { id: 'kaka', name: 'Kaká', role: 'Artista • Música e cultura', image: '/hello-brasil-site/images/kaka.jpeg', video: 'xi50IfRJgwQ', description: 'Conheça mais sobre Kaká e acompanhe seu vídeo em destaque.' },
 ];
 const musicSymbols = [
   { symbol: "𝄞", className: "clef clef-treble left-top" },
