@@ -1,13 +1,13 @@
 import {useMemo,useState, useEffect} from 'react';
 import {ArrowRight,ArrowUpRight,CalendarDays,Clock3,MapPin,Menu,X,Music2,Theater,Utensils,BriefcaseBusiness,Star,Search,Instagram,Facebook,Mail,Phone,ArrowLeft,CheckCircle2} from 'lucide-react';
 type Page='home'|'events'|'artists'|'artistDetail'|'about'|'contact'|'detail'|'recap';
-type EventItem={id:string,title:string,category:string,date:string,month:string,year:string,time:string,location:string,city:string,price:string,image:string,description:string};
+type EventItem={id:string,title:string,category:string,date:string,month:string,year:string,time:string,location:string,city:string,price:string,ticketPrices:{label:string;price:string}[],image:string,description:string};
 const events:EventItem[]=[
-{id:'gustavo',title:'Chopp Samba - Flash Back',category:'Shows e Festivais',date:'22',month:'NOV',year:'2026',time:'Abertura dos portões às 17h',location:'Sedinha Quintal do Samba',city:'Santos / SP',price:'Ingressos em breve',image:'/hello-brasil-site/images/Hello_Brasil.jpg',description:'Prepare-se para uma noite inesquecível com música ao vivo, energia contagiante e uma produção pensada para transformar cada instante em memória.'},
-{id:'verao',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',image:'',description:''},
-{id:'henrique',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',image:'',description:''},
-{id:'tomorrowland',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',image:'',description:''},
-{id:'gastronomia',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',image:'',description:''}];
+{id:'gustavo',title:'Chopp Samba - Flash Back',category:'Shows e Festivais',date:'22',month:'NOV',year:'2026',time:'Abertura dos portões às 17h',location:'Sedinha Quintal do Samba',city:'Santos / SP',price:'Ingressos em breve',ticketPrices:[{label:'Convites antecipados',price:'R$ 110,00'},{label:'No dia do evento',price:'R$ 140,00'}],image:'/hello-brasil-site/images/Hello_Brasil.jpg',description:'Prepare-se para uma noite inesquecível com música ao vivo, energia contagiante e uma produção pensada para transformar cada instante em memória.'},
+{id:'porco-no-rolete',title:'1º Porco no Rolete',category:'Gastronomia',date:'12',month:'DEZ',year:'2026',time:'A partir das 12h',location:'Quadra da ADEFIC',city:'Rua Papa João Paulo I, 460 — Cubatão / SP',price:'R$ 100,00',ticketPrices:[{label:'Valor único',price:'R$ 100,00'}],image:'/hello-brasil-site/images/porco-no-rolete.jpeg',description:'Uma confraternização entre amigos com porco no rolete, deliciosas sobremesas e muita alegria. Bebidas e sobremesas à parte.'},
+{id:'henrique',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',ticketPrices:[],image:'',description:''},
+{id:'tomorrowland',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',ticketPrices:[],image:'',description:''},
+{id:'gastronomia',title:'',category:'',date:'',month:'',year:'',time:'',location:'',city:'',price:'',ticketPrices:[],image:'',description:''}];
 const cats=[{name:'Shows e Festivais',Icon:Music2},{name:'Cultura e Arte',Icon:Theater},{name:'Gastronomia',Icon:Utensils},{name:'Corporativo',Icon:BriefcaseBusiness},{name:'Experiências Exclusivas',Icon:Star}];
 const nav:[Page,string][]=[['home','Página Principal'],['events','Eventos'],['artists','Artistas'],['about','Sobre Nós'],['contact','Fale Conosco']];
 const artists = [
@@ -57,7 +57,10 @@ function MusicBackground() {
   );
 }
 export default function App(){
-const [page,setPage]=useState<Page>('home'),[chosen,setChosen]=useState(events[0]),[chosenArtist,setChosenArtist]=useState(artists[0]),[filter,setFilter]=useState('Todos'),[search,setSearch]=useState(''),[menu,setMenu]=useState(false),[form,setForm]=useState({name:'',email:'',subject:'Produção de evento',message:''}),[status,setStatus]=useState('');
+const [page,setPage]=useState<Page>('home'),[chosen,setChosen]=useState(events[0]),[chosenArtist,setChosenArtist]=useState(artists[0]),[filter,setFilter]=useState('Todos'),[search,setSearch]=useState(''),[menu,setMenu]=useState(false),[form,setForm]=useState({name:'',email:'',subject:'Produção de evento',message:''}),[status,setStatus]=useState(''),[homeSlide,setHomeSlide]=useState(0);
+const homeEvents=events.filter(event=>event.title && event.image);
+const featuredEvent=homeEvents[homeSlide] ?? homeEvents[0];
+function changeHomeSlide(direction:number){setHomeSlide(current=>(current+direction+homeEvents.length)%homeEvents.length)}
 function go(p:Page){setPage(p);setMenu(false);setStatus('');window.scrollTo({top:0,behavior:'smooth'})}
 function openEvent(e:EventItem){setChosen(e);go('detail')}
 function openArtist(artist:typeof artists[number]){setChosenArtist(artist);go('artistDetail')}
@@ -131,26 +134,35 @@ return <div className="app">
     <section className="categories">{cats.map(({name,Icon})=>
         <button key={name} onClick={()=>{setFilter(name);go('events')}}><Icon/><span>{name}</span></button>)}
     </section>
-    <section className="featured wrap">
-        <button className="featured-photo" onClick={()=>openEvent(events[0])} aria-label="Ver informações do próximo evento">
-            <img src={events[0].image} alt="Show ao vivo"/>
-            <span>PRÓXIMO EVENTO</span>
+    <section className="featured-wrap wrap" aria-label="Carrossel de eventos">
+      <section className="featured">
+        <button className="featured-photo" onClick={()=>openEvent(featuredEvent)} aria-label={`Ver informações de ${featuredEvent.title}`}>
+          <img src={featuredEvent.image} alt={featuredEvent.title}/>
+          <span>{featuredEvent.id === 'porco-no-rolete' ? 'PRÓXIMO EVENTO' : 'EVENTO HELLO BRASIL'}</span>
         </button>
         <div className="featured-info">
-            <p className="eyebrow">SHOW / HELLO BRASIL APRESENTA</p>
-            <h2>SHOPP SAMBA</h2>
-            <h3>FLASH BACK</h3>
-            <p><CalendarDays/>{events[0].date} de {events[0].month} de {events[0].year}</p>
-            <p><MapPin/>{events[0].location} — {events[0].city}</p>
-            <p><Clock3/>{events[0].time}</p>
-            <button className="gold-button" onClick={()=>openEvent(events[0])}>SAIBA MAIS <ArrowRight/></button>
+          <p className="eyebrow">{featuredEvent.category.toUpperCase()} / HELLO BRASIL APRESENTA</p>
+          <h2>{featuredEvent.title}</h2>
+          <h3>{featuredEvent.id === 'porco-no-rolete' ? 'CONFRATERNIZAÇÃO ENTRE AMIGOS' : 'FLASH BACK'}</h3>
+          <p><CalendarDays/>{featuredEvent.date} de {featuredEvent.month} de {featuredEvent.year}</p>
+          <p><MapPin/>{featuredEvent.location} — {featuredEvent.city}</p>
+          <p><Clock3/>{featuredEvent.time}</p>
+          <button className="gold-button" onClick={()=>openEvent(featuredEvent)}>SAIBA MAIS <ArrowRight/></button>
         </div>
         <aside className="featured-quote">
-            <p>Prepare-se para uma noite inesquecível com um dos grandes nomes da música brasileira.</p>
-            <span>Hello Brasil</span>
+          <p>{featuredEvent.description}</p>
+          <span>Hello Brasil</span>
         </aside>
+      </section>
+      <div className="home-carousel-controls" aria-label="Controles do carrossel">
+        <button type="button" onClick={()=>changeHomeSlide(-1)} aria-label="Evento anterior"><ArrowLeft/></button>
+        <div className="home-carousel-dots">
+          {homeEvents.map((event,index)=><button key={event.id} type="button" className={index===homeSlide?'active':''} onClick={()=>setHomeSlide(index)} aria-label={`Mostrar ${event.title}`}/>) }
+        </div>
+        <button type="button" onClick={()=>changeHomeSlide(1)} aria-label="Próximo evento"><ArrowRight/></button>
+      </div>
     </section>
-    <section className="upcoming wrap">
+    <section className="upcoming wrap"/>    <section className="upcoming wrap">
   <div className="section-head">
     <div>
       <p className="eyebrow">VIVA O PRÓXIMO CAPÍTULO</p>
@@ -158,66 +170,8 @@ return <div className="app">
     </div>
   </div>
 
-  <div
-    style={{
-      minHeight: "220px",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      textAlign: "center",
-      padding: "40px 20px",
-      border: "1px solid rgba(217, 170, 70, 0.25)",
-      background:
-        "linear-gradient(135deg, #11100d, #090909)",
-      marginTop: "24px",
-      gap: "14px",
-    }}
-  >
-    <span
-      style={{
-        color: "#D9AA46",
-        fontSize: "28px",
-        lineHeight: 1,
-      }}
-    >
-      ✦
-    </span>
-
-    <h3
-      style={{
-        color: "#F5E8C8",
-        fontFamily: "Georgia, serif",
-        fontSize: "24px",
-        fontWeight: "normal",
-        margin: 0,
-      }}
-    >
-      Novas experiências estão chegando
-    </h3>
-
-    <p
-      style={{
-        color: "#B9B4A9",
-        fontSize: "14px",
-        lineHeight: 1.8,
-        maxWidth: "420px",
-        margin: 0,
-      }}
-    >
-      Estamos preparando momentos especiais
-      para você. Em breve, anunciaremos nossos
-      próximos eventos.
-    </p>
-
-    <span
-      style={{
-        width: "48px",
-        height: "1px",
-        backgroundColor: "#D9AA46",
-        marginTop: "8px",
-      }}
-    />
+  <div className="home-upcoming-grid">
+    <Card event={events[1]} />
   </div>
 </section>
     <section className="home-cta">
@@ -309,12 +263,20 @@ return <div className="app">
             <h1>{chosen.title}</h1>
             <p className="lead">{chosen.description}</p>
             <h2>Sobre o evento</h2>
-            <p>Prepare-se para uma tarde especial de muito samba, alegria e celebração! O Chopp Samba — Flash Black | Primeira Festa, realizado pelo Sedinha Quintal do Samba, promete reunir música boa, grandes artistas e muita energia em um encontro feito para quem ama samba e momentos inesquecíveis.</p>
-            <p>O evento contará com as apresentações de Didi Gomes, Sombra, Kaka Matheus, DJ Helinho, Renato Safu e Amigos do Passinho do Guarujá, além da participação especial da Banda João Sorriso, garantindo uma programação repleta de ritmo e diversão.</p>
-            <p>📅 Data: 22 de novembro, domingo</p><p>🕔 Horário: das 17h às 23h30</p><p>📍 Local: Sedinha Quintal do Samba</p><p>📌 Endereço: Rua Napoleão Laureano, 172 — Marapé</p>
-            <p>🍺 O convite inclui chopp The Brahmanes, conforme divulgado no material do evento.</p> <p>🎟️ Garanta seu convite e venha fazer parte dessa primeira festa!</p>
-            <h4>Chame os amigos, prepare o clima de festa e venha curtir uma experiência especial ao som do melhor do samba!</h4>
-            <p className="disclaimer">As informações desta página são demonstrativas e devem ser confirmadas pela organização antes da divulgação pública.</p>
+            {chosen.id === 'porco-no-rolete' ? <>
+              <p>Venha fazer sua confraternização entre amigos no 1º Porco no Rolete, realizado pela ADEFIC com produção da Hello Brasil.</p>
+              <p>🐷 Porco no rolete e deliciosas sobremesas.</p>
+              <p>🥤 Bebidas e sobremesas à parte.</p>
+              <p>🎟️ Valor: R$ 100,00.</p>
+              <h4>Esperamos você para compartilhar esse momento especial!</h4>
+            </> : <>
+              <p>Prepare-se para uma tarde especial de muito samba, alegria e celebração! O Chopp Samba — Flash Black | Primeira Festa, realizado pelo Sedinha Quintal do Samba, promete reunir música boa, grandes artistas e muita energia em um encontro feito para quem ama samba e momentos inesquecíveis.</p>
+              <p>O evento contará com as apresentações de Didi Gomes, Sombra, Kaka Matheus, DJ Helinho, Renato Safu e Amigos do Passinho do Guarujá, além da participação especial da Banda João Sorriso, garantindo uma programação repleta de ritmo e diversão.</p>
+              <p>📅 Data: 22 de novembro, domingo</p><p>🕔 Horário: das 17h às 23h30</p><p>📍 Local: Sedinha Quintal do Samba</p><p>📌 Endereço: Rua Napoleão Laureano, 172 — Marapé</p>
+              <p>🍺 O convite inclui chopp The Brahmanes, conforme divulgado no material do evento.</p> <p>🎟️ Garanta seu convite e venha fazer parte dessa primeira festa!</p>
+              <h4>Chame os amigos, prepare o clima de festa e venha curtir uma experiência especial ao som do melhor do samba!</h4>
+              <p className="disclaimer">As informações desta página são demonstrativas e devem ser confirmadas pela organização antes da divulgação pública.</p>
+            </>}
         </section>
         <aside className="event-facts">
     <p className="eyebrow">INFORMAÇÕES</p>
@@ -344,79 +306,36 @@ return <div className="app">
       </span>
     </p>
 
-    <p>
-      <Star />
-      <span>
-        <small>INGRESSOS</small>
-        {chosen.price}
-      </span>
-    </p>
-
-    <div
-      className="ticket-prices"
-      style={{
-        borderTop: "1px solid rgba(217, 170, 70, 0.25)",
-        borderBottom: "1px solid rgba(217, 170, 70, 0.25)",
-        padding: "18px 0",
-        margin: "8px 0 22px",
-      }}
-    >
-      <p
-        className="eyebrow"
-        style={{
-          marginBottom: "16px",
-          color: theme === "light" ? "#17130B" : "#E5B84F",
-        }}
-      >
-        🍺 PREÇOS DOS INGRESSOS
+    <div className="ticket-prices" style={{
+      borderTop: "1px solid rgba(217, 170, 70, 0.25)",
+      borderBottom: "1px solid rgba(217, 170, 70, 0.25)",
+      padding: "18px 0",
+      margin: "8px 0 22px",
+    }}>
+      <p className="eyebrow" style={{
+        marginBottom: "16px",
+        color: theme === "light" ? "#17130B" : "#E5B84F",
+      }}>
+        <Star /> INGRESSOS
       </p>
-
-      <div
-        style={{
+      {chosen.ticketPrices.map((ticket) => (
+        <div key={ticket.label} style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           gap: "12px",
-          marginBottom: "16px",
-        }}
-      >
-        <span style={{
-          color: theme === "light" ? "#17130B" : "#F5E8C8",
-          fontSize: "14px",
+          marginBottom: "12px",
         }}>
-          Convites Antecipados
-        </span>
-
-        <strong style={{
-          color: theme === "light" ? "#17130B" : "#D9AA46",
-          whiteSpace: "nowrap",
-        }}>
-          R$ 110,00
-        </strong>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: "12px",
-        }}
-      >
-        <span style={{
-          color: theme === "light" ? "#17130B" : "#F5E8C8",
-          fontSize: "14px",
-        }}>
-          No dia do evento
-        </span>
-
-        <strong style={{
-          color: theme === "light" ? "#17130B" : "#D9AA46",
-          whiteSpace: "nowrap",
-        }}>
-          R$ 140,00
-        </strong>
-      </div>
+          <span style={{
+            color: theme === "light" ? "#17130B" : "#F5E8C8",
+            fontSize: "14px",
+          }}>{ticket.label}</span>
+          <strong style={{
+            color: theme === "light" ? "#17130B" : "#D9AA46",
+            whiteSpace: "nowrap",
+          }}>{ticket.price}</strong>
+        </div>
+      ))}
     </div>
             <a
                 className="gold-button"
